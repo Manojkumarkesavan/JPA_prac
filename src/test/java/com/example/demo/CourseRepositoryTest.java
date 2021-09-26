@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import com.example.demo.entity.Course;
+import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
 import com.example.demo.repository.CourseRepository;
 
@@ -25,7 +26,7 @@ public class CourseRepositoryTest {
 		System.out.println("Courses :" + course);
 	}
 
-	//@Test
+	// @Test
 	public void savecoursewithTeacher() {
 		Teacher teacher = Teacher.builder().firstName("priyanka").lastName("deshpande").build();
 		Course course = Course.builder().title("kafka").credit(6).teacher(teacher).build();
@@ -45,7 +46,7 @@ public class CourseRepositoryTest {
 		int TotalPages = courseRepository.findAll(pagewith3).getTotalPages();
 
 		System.out.println("Course with pagination: " + courses);
-		
+
 		System.out.println("Course with Total Element: " + TotalElements);
 		System.out.println("Course with Total Pages : " + TotalPages);
 	}
@@ -66,13 +67,25 @@ public class CourseRepositoryTest {
 		System.out.println("Courses sort by title &  credit :" + courseTC);
 
 	}
-	
+
 	@Test
 	public void findByTitlebyContaining() {
 		Pageable firstTenRecords = PageRequest.of(0, 10);
-		
+
 		List<Course> course = courseRepository.findByTitleContaining("D", firstTenRecords).getContent();
+
+		System.out.println("Course with custom Page/sort: " + course);
+	}
+
+	@Test
+	public void saveCourseWithStudentAndTeacher() {
+		Teacher teacher = Teacher.builder().firstName("navin").lastName("reddy").build();
+
+		Student student = Student.builder().firstName("reddy").lastName("garu").emailId("reddy@gmail.com").build();
+		Course course = Course.builder().title("kubernetes").credit(7).teacher(teacher).build();
+
+		course.addStudents(student);
 		
-		System.out.println("Course with custom Page/sort: "+course);
+		courseRepository.save(course);
 	}
 }
